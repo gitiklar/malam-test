@@ -1,0 +1,42 @@
+.loginContainer , .registerContainer {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(rgba(255, 0, 17, 0.25), rgba(136, 135, 135, 0.25)), url(./images/bg2.jpg);
+    background-size: cover;
+
+    .form-container {
+        padding-top: 5rem;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+
+        .form {
+            width: 50vw;
+
+            .colorWhite {
+                color: white;
+            }
+
+            button{
+                background-color: transparent;
+                border-color: white;
+            }
+            
+            .anticon {
+                margin-left: 20px;
+            }
+            
+            .ant-select-selection-placeholder , .ant-select-selection-item {
+                margin-right: 20px;
+            }
+            .ant-form-item-explain.ant-form-item-explain-error {
+                color: white;
+            }
+        }
+    }    
+}
