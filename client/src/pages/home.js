@@ -6,13 +6,14 @@ import { Link, Route } from 'react-router-dom';
 
 import { logout } from '../redux/actions';
 import logoImg from '../../styles/images/logo.jpg';
-import InventoryManagement from '../components/inventoryManagement';
+import StoreManagement from '../components/storeManagement';
 import Statistics from '../components/statistics';
+import BuyOnline from '../components/buyOnline';
 
 const AdministratorPrivileges = () => {
     return (
         <>
-            <Link to="/home/inventory-management">Inventory management</Link>
+            <Link to="/home/store-management">Store management</Link>
             <Link to="/home/statistics">Statistics</Link>
         </>
     )
@@ -42,13 +43,15 @@ const Home = () => {
             <div id="heading" >
                 <div className="menuLine">
                     <Link to="/home">Home</Link>
+                    <Link to="/home/buy-online">Buy online</Link>
                     { role === 'admin' && <AdministratorPrivileges/> }
                 </div>
             </div>
             <section id="main" className="wrapper">
                 <div className="inner">
-                <Route path="/home/inventory-management" component= {InventoryManagement}/>
-                <Route path="/home/statistics" component= {Statistics}/>
+                    <Route path="/home/store-management" component= {StoreManagement}/>
+                    <Route path="/home/statistics" component= {Statistics}/>
+                    <Route path="/home/buy-online" component= {BuyOnline}/>
                 </div>
             </section>
         </div>

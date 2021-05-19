@@ -10,7 +10,6 @@ import Home from './pages/home';
 import store from './redux/store';
 import '../styles/main.scss';
 import Register from './pages/register';
-import InventoryManagement from './components/inventoryManagement';
 
 const App = () => {
 

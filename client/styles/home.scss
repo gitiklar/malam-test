@@ -114,16 +114,20 @@ $header-height: 6.5vh;
             width: 75rem;
             max-width: calc(100% - 6rem);
             height: 100%;
-            @media screen and (max-width: 480px) {
-                & {
-                    max-width: calc(100% - 3rem); 
-                } 
-            }
+           
             .topCandiesEditableTable {
                 width: 100%;
                 height: 30px;
                 background-color: transparent;
                 img {
+                    cursor: pointer;
+                }
+            }
+
+            .buyOnlineContainer {
+                height: 100%;
+                width: 100%;
+                button {
                     cursor: pointer;
                 }
             }

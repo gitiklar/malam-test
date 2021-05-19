@@ -21,7 +21,7 @@ const CandiesEditableTable = () => {
     const isEditing = record => record.key === editingKey;
 
     const edit = record => {
-        form.setFieldsValue({ name: '', price: '', image: '', ...record, }); 
+        form.setFieldsValue({ candyName: '', price: '', image: '', ...record, }); 
         setEditingKey(record.key);
     };
 
@@ -58,10 +58,10 @@ const CandiesEditableTable = () => {
         dispatch(deleteRow(index));
     }
 
-    const columns = [   {   title: 'name'      , dataIndex: 'name'      ,  width: '30%' , editable: true, }, 
-                        {   title: 'price'     , dataIndex: 'price'     ,  width: '30%' , editable: true, },
-                        {   title: 'image'     , dataIndex: 'image'     ,  width: '30%' , editable: true, },
-                        {   title: 'operation' , dataIndex: 'operation' ,   
+    const columns = [   {   title: 'candyName'      , dataIndex: 'candyName' ,  width: '30%' , editable: true, }, 
+                        {   title: 'price'          , dataIndex: 'price'     ,  width: '30%' , editable: true, },
+                        {   title: 'image'          , dataIndex: 'image'     ,  width: '30%' , editable: true, },
+                        {   title: 'operation'      , dataIndex: 'operation' ,   
                             render: (_, record) => {
                                 const editable = isEditing(record);                                                                               
                                 return editable ? (

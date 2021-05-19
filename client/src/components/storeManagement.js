@@ -8,7 +8,7 @@ import CandiesEditableTable from './candiesEditableTable';
 import addCandyIcon from '../../styles/images/addCandyIcon.jpg';
 import AddNewCandy from './addNewCandy';
 
-const InventoryManagement = () => {
+const StoreManagement = () => {
     const [ isVisible , setIsVisible ] = useState(false);
     const role = useSelector(state => state.userReducer.loggedInUserFormData.role);
     if(role !== 'admin') return <Redirect to="/home"/>;
@@ -26,4 +26,4 @@ const InventoryManagement = () => {
     );
 };
 
-export default InventoryManagement;
+export default StoreManagement;

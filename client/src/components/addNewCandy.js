@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
-import { Form , Button, Input, Modal } from 'antd';
-import { UserOutlined, WalletOutlined } from '@ant-design/icons';
+import { Form , Button, Input, Modal, message } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
 
-//import { saveNewCategory, validateUniqueFieldInAnArray } from '../redux/actions';
-//import useTitle from '../customHooks/useTitle';
+import { addNewCandy } from '../redux/actions';
 
 const AddNewCandy = ({ isVisible , setIsVisible }) => {
-    
-    const handleOk = () => visibleFalse();
+    const [ key , setKey ] = useState(true);
+    const dispatch = useDispatch();
+    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
+
+    useEffect(()=> {
+        if(!indicationMessage.message) return;
+        indicationMessage.type === 'error' && message.error({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
+        indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
+        indicationMessage.type === 'success' && message.success({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
+    } , [indicationMessage.message]);
+
+    const handleOk = newCandyFormData =>  {
+        dispatch(addNewCandy(newCandyFormData , visibleFalse));
+        setKey(key=>!key);
+    }
     const visibleFalse = () => setIsVisible(false);
 
     return (
@@ -19,15 +30,15 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
                 <Button key="back" onClick={visibleFalse}> Return </Button>,]}
             >
 
-                <Form id="newCandyForm" onFinish={handleOk}  onInput={(e)=>onInputHandler(e.target.value)} name="basic">
-                    <Form.Item name="Candy name" rules={[{ required: true, message: 'Please enter candy name!',},]}>
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="candy name" />
+                <Form id="newCandyForm" onFinish={handleOk} key={key} name="basic">
+                    <Form.Item name="candyName" rules={[{ required: true, message: 'Please enter candy name!',},]}>
+                        <Input prefix={<CheckOutlined className="site-form-item-icon" />} placeholder="candy name" />
                     </Form.Item>
-                    <Form.Item name="Price" rules={[{ required: true, message: 'Please enter candy price!',},]}>
-                        <Input prefix={<WalletOutlined/>} data-address={true} type="number" placeholder="candy price"/>
+                    <Form.Item name="price" rules={[{ required: true, message: 'Please enter candy price!',},]}>
+                        <Input prefix={<CheckOutlined />} data-address={true} type="number" placeholder="candy price"/>
                     </Form.Item>
-                    <Form.Item name="Image">
-                        <Input prefix={<WalletOutlined/>} data-address={true} placeholder="candy image"/>
+                    <Form.Item name="image">
+                        <Input prefix={<CheckOutlined />} data-address={true} placeholder="candy image"/>
                     </Form.Item>
                 </Form>
             </Modal>
