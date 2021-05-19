@@ -1,6 +1,7 @@
 export const INDICATION_MESSAGE = 'INDICATION_MESSAGE';
 export const UPDATE_LOGGED_IN_USER_FORM_DATA = 'UPDATE_LOGGED_IN_USER_FORM_DATA';
 export const LOAD_DATA_FROM_LOCAL_STORAGE = 'LOAD_DATA_FROM_LOCAL_STORAGE';
+export const ADD_NEW_CANDY = 'ADD_NEW_CANDY';
 import { postRequest } from "../service";
 
 export const updateLoggedInUserFormData = user => {
@@ -15,10 +16,11 @@ export const loadDataFromLocalStorage = () => {
     return { type: LOAD_DATA_FROM_LOCAL_STORAGE };
 }
 
-export const createNewUser = (registerUserFormData , history) => {
-    registerUserFormData.role = 'client';
-    delete registerUserFormData['confirm-password'];
+export const logout = () => {
+    return updateLoggedInUserFormData({ username: 'guest', role: 'guest' });
+}
 
+export const createNewUser = (registerUserFormData , history) => {
     return async (dispatch , getState) => {
         try {     
             const response = await postRequest('/user' , registerUserFormData);
@@ -42,7 +44,7 @@ export const login = (loginUserFormData , history) => {
                 dispatch(indicationMessage(response.type, response.message));
             }
         } catch(err) {
-            dispatch(indicationMessage('error','!אופססס התרחשה שגיאה'));
+            dispatch(indicationMessage('error','Oops, an error occurred!'));
         }
         setTimeout(()=> dispatch(indicationMessage('', '')));
     }

@@ -1,4 +1,4 @@
-export const serverUrl = 'http://localhost:3000';
+const serverUrl = 'http://localhost:3000/api';
 
 const doFetch = async (url , method , body = null) => {
     const options = {
@@ -17,7 +17,7 @@ const doFetch = async (url , method , body = null) => {
 }
 
 export const postRequest = async (url , data) => {
-     return await doFetch(`${serverUrl}${url}` , 'POST' , data);
+    return await doFetch(`${serverUrl}${url}` , 'POST' , data);
 }
 
 export const getRequest = async (url , data) => {

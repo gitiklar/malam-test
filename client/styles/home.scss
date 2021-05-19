@@ -30,8 +30,7 @@ $header-height: 6.5vh;
         cursor: default;
         height: $header-height;
         img {
-            width: $header-height*0.8;
-            opacity: 0.7;
+            height: $header-height;
         }
         .divHello {
             display: flex;
@@ -39,8 +38,15 @@ $header-height: 6.5vh;
             justify-content: space-around;
             font-size: 2.1vh;
 
-            a {
+            a , button {
                 color:#ccc;
+            }
+            
+            button {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                font-size: 2.1vh;
             }
         }
     }
@@ -102,17 +108,24 @@ $header-height: 6.5vh;
         padding-top: 20px;
         height: calc((100vh - #{$header-height})*0.8);
         width: 100%;
-        
 
         .inner {
             margin: 0 auto;
             width: 75rem;
             max-width: calc(100% - 6rem);
-    
+            height: 100%;
             @media screen and (max-width: 480px) {
                 & {
                     max-width: calc(100% - 3rem); 
                 } 
+            }
+            .topCandiesEditableTable {
+                width: 100%;
+                height: 30px;
+                background-color: transparent;
+                img {
+                    cursor: pointer;
+                }
             }
         }
     }
