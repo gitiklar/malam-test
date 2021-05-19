@@ -7,7 +7,6 @@ export const saveLoggedInUserFormDataToLocalStorage = ({ getState }) => next => 
     return nextAction;
 }
 
-
 export const loadLoggedInUserFormDataFromLocalStorage = store => next => action => {
     if(action.type !== LOAD_DATA_FROM_LOCAL_STORAGE) return next(action);
     action.payload = JSON.parse(localStorage.getItem('loggedInUserFormData'));

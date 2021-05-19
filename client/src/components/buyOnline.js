@@ -10,7 +10,7 @@ const DemoBox = props => <p className={`height-${props.value}`}>{props.children}
 
 const BuyOnline = () => {
     const [ isVisible , setIsVisible ] = useState(false);
-
+    
     return (
       <div className="buyOnlineContainer" >
           <div className="topCandiesEditableTable">

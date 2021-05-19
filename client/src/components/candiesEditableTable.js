@@ -3,7 +3,7 @@ import { Table, Popconfirm, Form, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import EditableCell from './editableCell';
-import { deleteRow, updateRow } from '../redux/actions';
+import { deleteCandyRow, deleteCandyRowFromServer, updateCandyRow } from '../redux/actions';
 import 'antd/dist/antd.css';
 
 const CandiesEditableTable = () => {
@@ -11,7 +11,7 @@ const CandiesEditableTable = () => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
-    const originData = candiesArray.map((locationObj , index) => { return {...locationObj , key:index.toString()}});
+    const originData = candiesArray.map(candyObj => { return {...candyObj , key:candyObj._id}});
     const [data, setData] = useState(originData);
 
     useEffect(() => {
@@ -19,43 +19,33 @@ const CandiesEditableTable = () => {
     },[candiesArray]);
 
     const isEditing = record => record.key === editingKey;
-
+    const cancel = () => { setEditingKey('');};
     const edit = record => {
         form.setFieldsValue({ candyName: '', price: '', image: '', ...record, }); 
         setEditingKey(record.key);
     };
-
-    const cancel = () => { setEditingKey('');};
-
     const save = async key => {
         try {
                 const row = await form.validateFields();
                 const newData = [...data];
                 const index = newData.findIndex(item => key === item.key);
-        
-                if (index > -1) {
-                    const item = newData[index];
-                    newData.splice(index, 1, { ...item, ...row });
-                    setData(newData);
-                    setEditingKey('');
-                } else {
-                    newData.push(row);
-                    setData(newData);
-                    setEditingKey('');
-                }
-                dispatch(updateRow(index , row));
+                const _id = newData[index]._id;
+                dispatch(updateCandyRow(_id , row));
+                setTimeout(()=>setEditingKey('') , 100);
             } 
             catch (errInfo) {
                 console.log('Validate Failed:', errInfo);
             }
     };
     
-    const deleteRowHandler = key => {
+    const deleteCandyRowHandler = key => {
         const newData = [...data];
         const index = newData.findIndex(item => key === item.key);
+        const _id = newData[index]._id;
         newData.splice(index, 1);
         setData(newData);
-        dispatch(deleteRow(index));
+        dispatch(deleteCandyRow(index));
+        dispatch(deleteCandyRowFromServer(_id));
     }
 
     const columns = [   {   title: 'candyName'      , dataIndex: 'candyName' ,  width: '30%' , editable: true, }, 
@@ -73,7 +63,7 @@ const CandiesEditableTable = () => {
                                     </span>) : (
                                         <>
                                             <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>Edit &nbsp;&nbsp;&nbsp;&nbsp;</Typography.Link>
-                                            <Typography.Link disabled={editingKey !== ''} onClick={() => deleteRowHandler(record.key)}>Delete</Typography.Link>
+                                            <Typography.Link disabled={editingKey !== ''} onClick={() => deleteCandyRowHandler(record.key)}>Delete</Typography.Link>
                                         </>
                                     );},},
                     ];
@@ -82,7 +72,7 @@ const CandiesEditableTable = () => {
                 if (!col.editable) { return col; }
                         return {
                                 ...col, 
-                                onCell: record => ({ record, inputType: (col.dataIndex === 'price' || col.dataIndex === 'longitude') ? 'number' : 'text',
+                                onCell: record => ({ record, inputType: (col.dataIndex === 'price' ) ? 'number' : 'text',
                                     dataIndex: col.dataIndex,
                                     title: col.title,
                                     editing: isEditing(record),

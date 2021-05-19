@@ -18,9 +18,9 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
     } , [indicationMessage.message]);
 
     const handleOk = newCandyFormData =>  {
-        dispatch(addNewCandy(newCandyFormData , visibleFalse));
-        setKey(key=>!key);
+        dispatch(addNewCandy(newCandyFormData , visibleFalse , setKey));
     }
+    
     const visibleFalse = () => setIsVisible(false);
 
     return (

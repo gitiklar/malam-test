@@ -23,3 +23,11 @@ export const postRequest = async (url , data) => {
 export const getRequest = async (url , data) => {
     return await doFetch(`${serverUrl}${url}` , 'GET' , data);
 }
+
+export const deleteRequest = async (url) => {
+    return await doFetch(`${serverUrl}${url}` , 'DELETE');
+}
+
+export const putRequest = async (url , data) => {
+    return await doFetch(`${serverUrl}${url}` , 'PUT' , data);
+}

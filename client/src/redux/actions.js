@@ -3,7 +3,13 @@ export const UPDATE_LOGGED_IN_USER_FORM_DATA = 'UPDATE_LOGGED_IN_USER_FORM_DATA'
 export const LOAD_DATA_FROM_LOCAL_STORAGE = 'LOAD_DATA_FROM_LOCAL_STORAGE';
 export const ADD_NEW_CANDY = 'ADD_NEW_CANDY';
 export const UPDATE_CANDIES_ARRAY_IN_STORE = 'UPDATE_CANDIES_ARRAY_IN_STORE';
-import { getRequest, postRequest } from "../service";
+export const DELETE_CANDY_ROW = 'DELETE_CANDY_ROW';
+export const UPDATE_CANDY_TO_STORE = 'UPDATE_CANDY_TO_STORE';
+import { deleteRequest, getRequest, postRequest, putRequest } from "../service";
+
+export const deleteCandyRow = rowIndex => {
+    return { type: DELETE_CANDY_ROW ,  payload: rowIndex};
+}
 
 export const updateLoggedInUserFormData = user => {
     return { type: UPDATE_LOGGED_IN_USER_FORM_DATA , payload: user };
@@ -29,6 +35,35 @@ export const addNewCandyToStore = newCandyFormData => {
     return { type: ADD_NEW_CANDY , payload: newCandyFormData};
 }
 
+export const updateCandyToStore = newCandyFormData => {
+    return { type: UPDATE_CANDY_TO_STORE , payload: newCandyFormData};
+}
+
+export const updateCandyRow = (rowId , updatedCandyData) => {
+    return async (dispatch) => {
+        try {     
+            const response = await putRequest('/candy/'+ rowId , updatedCandyData);
+            response.status === 200 && dispatch(updateCandyToStore(response.updatedCandy));
+            dispatch(indicationMessage(response.type, response.message));
+            setTimeout(()=> dispatch(indicationMessage('', '')));
+        } catch(err) {
+            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+        }
+    }
+}
+
+export const deleteCandyRowFromServer = rowId => {
+    return async (dispatch) => {
+        try {     
+            const response = await deleteRequest('/candy/'+ rowId);
+            dispatch(indicationMessage(response.type, response.message));
+            setTimeout(()=> dispatch(indicationMessage('', '')));
+        } catch(err) {
+            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+        }
+    }
+}
+
 export const loadCandiesArrayFromServer = () => {
     return async (dispatch) => {
         try {     
@@ -42,12 +77,14 @@ export const loadCandiesArrayFromServer = () => {
     }
 }
 
-export const addNewCandy = (newCandyFormData , visibleFalse) => {
+export const addNewCandy = (newCandyFormData , visibleFalse , setKey) => {
     return async (dispatch) => {
         try {     
             const response = await postRequest('/candy' , newCandyFormData);
             dispatch(indicationMessage(response.type, response.message));
-            response.status === 200 && (visibleFalse() , dispatch(addNewCandyToStore(newCandyFormData)));
+            response.status === 200 && (
+                setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy))
+            );
             setTimeout(()=> dispatch(indicationMessage('', '')));
         } catch(err) {
             dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
