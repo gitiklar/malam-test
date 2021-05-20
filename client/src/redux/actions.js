@@ -26,7 +26,7 @@ export const updateLoggedInUserFormData = user => {
     return { type: UPDATE_LOGGED_IN_USER_FORM_DATA , payload: user };
 }
 
-export const indicationMessage = (type , message) => {
+export const indicationMessageHandler = (type , message) => {
     return { type: INDICATION_MESSAGE , payload: { type , message } };
 }
 
@@ -54,11 +54,11 @@ export const updateCandiesCountByOrder = (buyingSummary) => {
     return async (dispatch) => {
         try {     
             const response = await postRequest('/candies', buyingSummary);
-            dispatch(indicationMessage(response.type, response.message));
+            dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && dispatch(clearBuyingSummary());
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -68,10 +68,10 @@ export const updateCandyRow = (rowId , updatedCandyData) => {
         try {     
             const response = await putRequest('/candy/'+ rowId , updatedCandyData);
             response.status === 200 && dispatch(updateCandyToStore(response.updatedCandy));
-            dispatch(indicationMessage(response.type, response.message));
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            dispatch(indicationMessageHandler(response.type, response.message));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -80,10 +80,10 @@ export const deleteCandyRowFromServer = rowId => {
     return async (dispatch) => {
         try {     
             const response = await deleteRequest('/candy/'+ rowId);
-            dispatch(indicationMessage(response.type, response.message));
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            dispatch(indicationMessageHandler(response.type, response.message));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -92,11 +92,11 @@ export const loadCandiesArrayFromServer = () => {
     return async (dispatch) => {
         try {     
             const response = await getRequest('/candies');
-            dispatch(indicationMessage(response.type, response.message));
+            dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && dispatch(updateCandiesArray(response.candies));
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -105,13 +105,13 @@ export const addNewCandy = (newCandyFormData , visibleFalse , setKey) => {
     return async (dispatch) => {
         try {     
             const response = await postRequest('/candy' , newCandyFormData);
-            dispatch(indicationMessage(response.type, response.message));
+            dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && (
                 setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy))
             );
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -120,11 +120,11 @@ export const createNewUser = (registerUserFormData , history , state) => {
     return async (dispatch) => {
         try {     
             const response = await postRequest('/user' , registerUserFormData);
-            dispatch(indicationMessage(response.type, response.message));
-            setTimeout(()=> dispatch(indicationMessage('', '')));
+            dispatch(indicationMessageHandler(response.type, response.message));
+            setTimeout(()=> dispatch(indicationMessageHandler('', '')));
             response.status === 200 && history.push('/login', state);
         } catch(err) {
-            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
         }
     }
 }
@@ -138,11 +138,11 @@ export const login = (loginUserFormData , history , urlParams) => {
                 urlParams && urlParams.backToBuyOnline && history.push('/home/buy-online');
                 !(urlParams && urlParams.backToBuyOnline) && history.push('/home');
             } else {
-                dispatch(indicationMessage(response.type, response.message));
+                dispatch(indicationMessageHandler(response.type, response.message));
             }
         } catch(err) {
-            dispatch(indicationMessage('error','Oops, an error occurred!'));
+            dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
         }
-        setTimeout(()=> dispatch(indicationMessage('', '')));
+        setTimeout(()=> dispatch(indicationMessageHandler('', '')));
     }
 }

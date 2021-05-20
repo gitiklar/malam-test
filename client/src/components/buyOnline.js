@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { Divider, Input, Tooltip } from 'antd';
+import { Divider, Input, message, Tooltip } from 'antd';
 import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
-import { updateBuyingSummary } from '../redux/actions';
+import { indicationMessageHandler , updateBuyingSummary } from '../redux/actions';
 import klikImg from '../../styles/images/klik.jpg';
 import Payment from './payment';
 
@@ -13,10 +13,17 @@ const BuyOnline = () => {
     const [ isVisible , setIsVisible ] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
+    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
     const role = useSelector(state => state.userReducer.loggedInUserFormData.role);
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);
 
+
+    useEffect(()=> {
+        if(!indicationMessage.message) return;
+        indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
+    } , [indicationMessage.message]);
+    
     const onChangeHandler = (id ,value) => {
         const newBuyingSummary = JSON.parse(JSON.stringify(buyingSummary));
         const indexOfCurrentCandy = buyingSummary.findIndex(candy=>candy.id === id);
@@ -26,10 +33,14 @@ const BuyOnline = () => {
     }
 
     const forPaymentHandler = () => {
-        if(role === 'guest') {
-            history.push('/login', { backToBuyOnline: true });
+        if(!buyingSummary.length) {
+            dispatch(indicationMessageHandler('info', 'You must buy at least one candy!'));
         } else {
-            setIsVisible(true);
+            if(role === 'guest') {
+                history.push('/login', { backToBuyOnline: true });
+            } else {
+                setIsVisible(true);
+            }
         }
     }
 
