@@ -71,9 +71,30 @@ const updateCandy = async (req, res) => {
     }
 }
 
+const updateCandiesCounts = async (req, res) => {
+    const order = req.body;
+    const arrayToUpdate = order.map(candy => ({
+        updateOne: {
+              filter: { _id: candy.id },
+              update: {
+                $inc: {count: candy.count },
+              }
+            }
+          })
+    );
+
+    try {
+        const result =  await Candy.bulkWrite(arrayToUpdate);
+        res.status(200).json({ status: 200, type: 'success' , message: 'Order was successfully placed!' , result});
+    } catch(err) {
+        res.status(400).json({ status: 400, type: 'error' , message: `Oops, an error occurred  : ${err.message}` });
+    }
+}
+
 module.exports = {
     addCandy,
     getCandies,
     deleteCandy,
     updateCandy,
+    updateCandiesCounts,
 }

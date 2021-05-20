@@ -20,9 +20,7 @@ const Entry = () => {
                     <Col span={8}><div className="linkToHome"><Link to="/home"><u>Entry</u></Link></div></Col>
                 </Row>
 			</header>
-			<div id="heading" >
-                
-            </div>
+			<div id="heading"></div>
 			<section id="main" className="wrapper">
 				<div className="inner">
                     <div className="entryPage">

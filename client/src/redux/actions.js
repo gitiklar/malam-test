@@ -5,7 +5,18 @@ export const ADD_NEW_CANDY = 'ADD_NEW_CANDY';
 export const UPDATE_CANDIES_ARRAY_IN_STORE = 'UPDATE_CANDIES_ARRAY_IN_STORE';
 export const DELETE_CANDY_ROW = 'DELETE_CANDY_ROW';
 export const UPDATE_CANDY_TO_STORE = 'UPDATE_CANDY_TO_STORE';
+export const UPDATE_BUYING_SUMMARY = 'UPDATE_BUYING_SUMMARY';
+export const CLEAR_BUYING_SUMMARY = 'CLEAR_BUYING_SUMMARY';
 import { deleteRequest, getRequest, postRequest, putRequest } from "../service";
+
+
+export const clearBuyingSummary = () => {
+    return { type: CLEAR_BUYING_SUMMARY};
+}
+
+export const updateBuyingSummary = buyingSummary => {
+    return { type: UPDATE_BUYING_SUMMARY ,  payload: buyingSummary};
+}
 
 export const deleteCandyRow = rowIndex => {
     return { type: DELETE_CANDY_ROW ,  payload: rowIndex};
@@ -37,6 +48,19 @@ export const addNewCandyToStore = newCandyFormData => {
 
 export const updateCandyToStore = newCandyFormData => {
     return { type: UPDATE_CANDY_TO_STORE , payload: newCandyFormData};
+}
+
+export const updateCandiesCountByOrder = (buyingSummary) => {
+    return async (dispatch) => {
+        try {     
+            const response = await postRequest('/candies', buyingSummary);
+            dispatch(indicationMessage(response.type, response.message));
+            response.status === 200 && dispatch(clearBuyingSummary());
+            setTimeout(()=> dispatch(indicationMessage('', '')));
+        } catch(err) {
+            dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
+        }
+    }
 }
 
 export const updateCandyRow = (rowId , updatedCandyData) => {
@@ -92,26 +116,27 @@ export const addNewCandy = (newCandyFormData , visibleFalse , setKey) => {
     }
 }
 
-export const createNewUser = (registerUserFormData , history) => {
+export const createNewUser = (registerUserFormData , history , state) => {
     return async (dispatch) => {
         try {     
             const response = await postRequest('/user' , registerUserFormData);
             dispatch(indicationMessage(response.type, response.message));
             setTimeout(()=> dispatch(indicationMessage('', '')));
-            response.status === 200 && history.push('/login'); 
+            response.status === 200 && history.push('/login', state);
         } catch(err) {
             dispatch(indicationMessage('error','!An error occurred the form was not submitted'));
         }
     }
 }
 
-export const login = (loginUserFormData , history) => {
+export const login = (loginUserFormData , history , urlParams) => {
     return async (dispatch) => {
         try {
             const response = await postRequest('/login' , loginUserFormData);
             if(response.status === 200) {
                 dispatch(updateLoggedInUserFormData(response.user));
-                history.push('/home');
+                urlParams && urlParams.backToBuyOnline && history.push('/home/buy-online');
+                !(urlParams && urlParams.backToBuyOnline) && history.push('/home');
             } else {
                 dispatch(indicationMessage(response.type, response.message));
             }

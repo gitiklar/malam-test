@@ -112,14 +112,12 @@ $header-height: 6.5vh;
     }
 
     .wrapper {
-
         height: calc((100vh - #{$header-height})*0.5);
         display: flex;
         align-items: center;
         justify-content: center;
         
-        .inner {
-            
+        .inner {            
             .entryPage {
             
                 & , .innerEntryPage {

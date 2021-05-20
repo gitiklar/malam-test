@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -10,7 +10,7 @@ import { createNewUser } from '../redux/actions';
 const Register = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const { state } = useLocation();
     const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
 
     useEffect(()=> {
@@ -22,8 +22,9 @@ const Register = () => {
 
     const onRegister = (registerUserFormData) => {  
         registerUserFormData.role = 'client';
+        delete registerUserFormData['confirm-password'];
         message.loading({ content: 'sending...', key:indicationMessage.key });
-        dispatch(createNewUser(registerUserFormData , history));
+        dispatch(createNewUser(registerUserFormData , history , state));
     }
 
     return (
@@ -42,7 +43,7 @@ const Register = () => {
                         <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="password"/>
                     </Form.Item>
                     
-                    <Form.Item rules={[{ required: true, message: 'Please confirm your password!', },
+                    <Form.Item name="confirm-password" rules={[{ required: true, message: 'Please confirm your password!', },
                         ({ getFieldValue }) => ({ validator(_, value) {
                             if (!value || getFieldValue('password') === value) {
                                 return Promise.resolve();
@@ -50,7 +51,7 @@ const Register = () => {
                             return Promise.reject(new Error('The two passwords that you entered do not match!'));
                             },
                         }),]}>
-                        <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="confirm password"/>
+                        <Input  prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="confirm password"/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="colorWhite">Register</Button>

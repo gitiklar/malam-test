@@ -5,8 +5,9 @@ import { loadLoggedInUserFormDataFromLocalStorage, saveLoggedInUserFormDataToLoc
 import { loadCandiesArrayFromServer, loadDataFromLocalStorage } from './actions';
 import userReducer from './reducers/userReducer';
 import candiesReducer from './reducers/candiesReducer';
+import buyingSummaryReducer from './reducers/buyingSummaryReducer';
 
-const reducer = combineReducers({ userReducer , candiesReducer});
+const reducer = combineReducers({ userReducer , candiesReducer , buyingSummaryReducer});
 
 const store = createStore(reducer , applyMiddleware(thunk , saveLoggedInUserFormDataToLocalStorage , loadLoggedInUserFormDataFromLocalStorage));
 store.dispatch(loadDataFromLocalStorage());

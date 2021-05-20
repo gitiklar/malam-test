@@ -1,5 +1,5 @@
-import { ADD_NEW_CANDY, DELETE_CANDY_ROW, UPDATE_CANDIES_ARRAY_IN_STORE, UPDATE_CANDY_TO_STORE } from '../actions';
 import produce from 'immer';
+import { ADD_NEW_CANDY, DELETE_CANDY_ROW, UPDATE_CANDIES_ARRAY_IN_STORE, UPDATE_CANDY_TO_STORE } from '../actions';
 
 const initialState = {
     candiesArray : [],

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { Form, Input, Button, message } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -10,6 +10,8 @@ import { login } from '../redux/actions';
 const Login = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const { state } = useLocation();
+
     const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
 
     useEffect(()=> {
@@ -19,7 +21,7 @@ const Login = () => {
 
     const onLogin = loginFormData => {
         message.loading({ content: 'checking...', key:indicationMessage.key });
-        dispatch(login(loginFormData , history));
+        dispatch(login(loginFormData , history , state));
     };
     
     return (
@@ -32,8 +34,8 @@ const Login = () => {
                     <Form.Item name="password" rules={[{ required: true, message: 'Please enter password!', },]}>
                         <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="password"/>
                     </Form.Item>
-                    <Form.Item>
-                        <Link to="/register" className="register colorWhite"> Or register now!</Link>
+                    <Form.Item>                        
+                        <Link to={{ pathname: "/register" , state: state}} className="register colorWhite"> Or register now!</Link>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="colorWhite">login</Button>

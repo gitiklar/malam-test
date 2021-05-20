@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const candyCtrl = require('../controllers/candy-ctrl');
 
+router.post('/candies' , candyCtrl.updateCandiesCounts);
 router.post('/candy' , candyCtrl.addCandy);
 router.get('/candies' , candyCtrl.getCandies);
 router.delete('/candy/:id', candyCtrl.deleteCandy);

@@ -4,20 +4,12 @@ import { Button, message } from 'antd';
 import 'antd/dist/antd.css';
 import { Link, Route } from 'react-router-dom';
 
-import { logout } from '../redux/actions';
+import { clearBuyingSummary, logout } from '../redux/actions';
 import logoImg from '../../styles/images/logo.jpg';
 import StoreManagement from '../components/storeManagement';
 import Statistics from '../components/statistics';
 import BuyOnline from '../components/buyOnline';
-
-const AdministratorPrivileges = () => {
-    return (
-        <>
-            <Link to="/home/store-management">Store management</Link>
-            <Link to="/home/statistics">Statistics</Link>
-        </>
-    )
-}
+import { AdministratorPrivileges } from '../components/administratorPrivileges';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -27,6 +19,7 @@ const Home = () => {
 
     const logoutHandler = () => {
         localStorage.removeItem('loggedInUserFormData');
+        dispatch(clearBuyingSummary());
         dispatch(logout());
     }
 
@@ -37,21 +30,21 @@ const Home = () => {
                  <div className="divHello">
                     <span> &nbsp; &nbsp; Hello { username } &nbsp;</span>
                     { role === 'guest' &&  <Link to="/login"><u>Login</u>&nbsp;&nbsp;</Link> }
-                    { role !== 'guest' &&  <Button onClick={logoutHandler}><u>Logout</u></Button> }
+                    { role !== 'guest' &&  <Button onClick = { logoutHandler }><u>Logout</u></Button> }
                  </div>
             </header>
             <div id="heading" >
                 <div className="menuLine">
-                    <Link to="/home">Home</Link>
+                    <Link to="/">Home</Link>
                     <Link to="/home/buy-online">Buy online</Link>
                     { role === 'admin' && <AdministratorPrivileges/> }
                 </div>
             </div>
             <section id="main" className="wrapper">
                 <div className="inner">
-                    <Route path="/home/store-management" component= {StoreManagement}/>
-                    <Route path="/home/statistics" component= {Statistics}/>
-                    <Route path="/home/buy-online" component= {BuyOnline}/>
+                    <Route path = "/home/store-management" component = { StoreManagement }/>
+                    <Route path = "/home/statistics" component = { Statistics }/>
+                    <Route path = "/home/buy-online" component = { BuyOnline }/>
                 </div>
             </section>
         </div>
