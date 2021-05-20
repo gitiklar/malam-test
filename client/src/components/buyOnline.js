@@ -18,7 +18,6 @@ const BuyOnline = () => {
     const role = useSelector(state => state.userReducer.loggedInUserFormData.role);
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);
 
-
     useEffect(()=> {
         if(!indicationMessage.message) return;
         indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
@@ -35,6 +34,7 @@ const BuyOnline = () => {
     const forPaymentHandler = () => {
         if(!buyingSummary.length) {
             dispatch(indicationMessageHandler('info', 'You must buy at least one candy!'));
+            setTimeout(()=>dispatch(indicationMessageHandler('', '')));
         } else {
             if(role === 'guest') {
                 history.push('/login', { backToBuyOnline: true });
