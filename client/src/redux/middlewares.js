@@ -1,15 +1,14 @@
-import { UPDATE_LOGGED_IN_USER_FORM_DATA , LOAD_DATA_FROM_LOCAL_STORAGE } from "./actions";
+import { getRequest } from "../service";
+import { GET_USER_IF_ACTIVE, updateLoggedInUserFormData, indicationMessageHandler } from "./actions";
 
-export const saveLoggedInUserFormDataToLocalStorage = ({ getState }) => next => action => {
-    const nextAction = next(action);
-    if(action.type !== UPDATE_LOGGED_IN_USER_FORM_DATA) return nextAction;
-    localStorage.setItem('loggedInUserFormData',JSON.stringify(getState().userReducer.loggedInUserFormData));
-    return nextAction;
-}
-
-export const loadLoggedInUserFormDataFromLocalStorage = store => next => action => {
-    if(action.type !== LOAD_DATA_FROM_LOCAL_STORAGE) return next(action);
-    action.payload = JSON.parse(localStorage.getItem('loggedInUserFormData'));
-    if(!action.payload) return;
+export const updateLoggedInUserFormDataMiddleware = ({dispatch}) => next => async action => {
+    const userId = (localStorage.getItem('userId'));
+    if(!userId || action.type !== GET_USER_IF_ACTIVE) return next(action);
+    try {
+        const response = await getRequest('/user/' + userId , true );
+        response.status === 200 && dispatch(updateLoggedInUserFormData(response.user));
+    } catch(err) {
+        dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
+    }
     return next(action);
 }

@@ -57,7 +57,9 @@ const BuyOnline = () => {
                         {
                              candiesArray.map(candy => { 
                                  return <Col key={candy._id} span={4} >
-                                            <img src={klikImg}></img>
+                                            <Tooltip placement="top" title="Add candy">
+                                                <img src={klikImg}></img>
+                                            </Tooltip>
                                             <Divider/>
                                             <div className="priceInputContainer">
                                                 <div>{`${candy.price}$`}</div>

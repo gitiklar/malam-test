@@ -20,6 +20,11 @@ export default produce((state , action) => {
             break;
         case UPDATE_LOGGED_IN_USER_FORM_DATA:
             state.loggedInUserFormData = action.payload;
+            if(action.payload._id) {
+                localStorage.setItem('userId' , action.payload._id)
+            } else {
+                localStorage.removeItem('userId');
+            }
             break;
         case LOAD_DATA_FROM_LOCAL_STORAGE: 
             state.loggedInUserFormData = action.payload;

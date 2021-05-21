@@ -18,7 +18,6 @@ const Home = () => {
     useEffect(() => message.destroy(indicationMessage.key) ,[]);  
 
     const logoutHandler = () => {
-        localStorage.removeItem('loggedInUserFormData');
         dispatch(clearBuyingSummary());
         dispatch(logout());
     }

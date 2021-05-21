@@ -5,7 +5,7 @@ import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
-import { createNewUser } from '../redux/actions';
+import { signUp } from '../redux/actions';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Register = () => {
         registerUserFormData.role = 'client';
         delete registerUserFormData['confirm-password'];
         message.loading({ content: 'sending...', key:indicationMessage.key });
-        dispatch(createNewUser(registerUserFormData , history , state));
+        dispatch(signUp(registerUserFormData , history , state));
     }
 
     return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Popconfirm, Form, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import EditableCell from './editableCell';
 import { deleteCandyRow, deleteCandyRowFromServer, updateCandyRow } from '../redux/actions';
@@ -8,6 +9,7 @@ import 'antd/dist/antd.css';
 
 const CandiesEditableTable = () => {
     const [editingKey, setEditingKey] = useState('');
+    const history = useHistory();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
@@ -30,7 +32,7 @@ const CandiesEditableTable = () => {
                 const newData = [...data];
                 const index = newData.findIndex(item => key === item.key);
                 const _id = newData[index]._id;
-                dispatch(updateCandyRow(_id , row));
+                dispatch(updateCandyRow(_id , row , history));
                 setTimeout(()=>setEditingKey('') , 100);
             } 
             catch (errInfo) {
@@ -45,7 +47,7 @@ const CandiesEditableTable = () => {
         newData.splice(index, 1);
         setData(newData);
         dispatch(deleteCandyRow(index));
-        dispatch(deleteCandyRowFromServer(_id));
+        dispatch(deleteCandyRowFromServer(_id , history));
     }
 
     const columns = [   {   title: 'candyName'      , dataIndex: 'candyName' ,  width: '30%' , editable: true, }, 

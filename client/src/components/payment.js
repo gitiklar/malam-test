@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form , Button, Input, Modal, message } from 'antd';
-import { UserAddOutlined , IdcardOutlined , CreditCardOutlined , ContactsOutlined  , ShoppingCartOutlined} from '@ant-design/icons';
+import { Form , Button, Input, Modal, message , Tooltip} from 'antd';
+import { UserAddOutlined , IdcardOutlined , CreditCardOutlined , ContactsOutlined  , ShoppingCartOutlined } from '@ant-design/icons';
 import { updateCandiesCountByOrder } from '../redux/actions';
+import { useHistory } from 'react-router';
 
 const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);   
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
@@ -23,7 +25,7 @@ const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
     } , [indicationMessage.message]);
 
     const handleOk = () =>  {
-        dispatch(updateCandiesCountByOrder(buyingSummary));
+        dispatch(updateCandiesCountByOrder(buyingSummary , history));
         visibleFalse();
     }
     
@@ -31,7 +33,9 @@ const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
 
     return (
         <div className="paymentContainer">
-            <button onClick={forPaymentHandler}><ShoppingCartOutlined/></button>
+            <Tooltip placement="top" title="For payment">
+                <button onClick={forPaymentHandler}><ShoppingCartOutlined/></button>
+            </Tooltip>
             <Modal visible={isVisible} title="Payment" onCancel={visibleFalse} footer={[
                 <Button form="paymentForm" key="submit" type="primary" htmlType="submit"> Order completion </Button>,
                 <Button key="back" onClick={visibleFalse}> Return </Button>,]}

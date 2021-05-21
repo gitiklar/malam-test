@@ -4,10 +4,12 @@ import { Form , Button, Input, Modal, message } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 
 import { addNewCandy } from '../redux/actions';
+import { useHistory } from 'react-router';
 
 const AddNewCandy = ({ isVisible , setIsVisible }) => {
     const [ key , setKey ] = useState(true);
     const dispatch = useDispatch();
+    const history = useHistory();
     const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
 
     useEffect(()=> {
@@ -18,7 +20,7 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
     } , [indicationMessage.message]);
 
     const handleOk = newCandyFormData =>  {
-        dispatch(addNewCandy(newCandyFormData , visibleFalse , setKey));
+        dispatch(addNewCandy(newCandyFormData , visibleFalse , setKey , history));
     }
     
     const visibleFalse = () => setIsVisible(false);

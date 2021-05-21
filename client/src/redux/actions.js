@@ -7,8 +7,13 @@ export const DELETE_CANDY_ROW = 'DELETE_CANDY_ROW';
 export const UPDATE_CANDY_TO_STORE = 'UPDATE_CANDY_TO_STORE';
 export const UPDATE_BUYING_SUMMARY = 'UPDATE_BUYING_SUMMARY';
 export const CLEAR_BUYING_SUMMARY = 'CLEAR_BUYING_SUMMARY';
+export const GET_USER_IF_ACTIVE = 'GET_USER_IF_ACTIVE';
+
 import { deleteRequest, getRequest, postRequest, putRequest } from "../service";
 
+export const getUserIfActive = () => {
+    return { type: GET_USER_IF_ACTIVE };
+}
 
 export const clearBuyingSummary = () => {
     return { type: CLEAR_BUYING_SUMMARY};
@@ -50,12 +55,13 @@ export const updateCandyToStore = newCandyFormData => {
     return { type: UPDATE_CANDY_TO_STORE , payload: newCandyFormData};
 }
 
-export const updateCandiesCountByOrder = (buyingSummary) => {
+export const updateCandiesCountByOrder = (buyingSummary , history) => {
     return async (dispatch) => {
         try {     
-            const response = await postRequest('/candies', buyingSummary);
+            const response = await postRequest('/candies', true , buyingSummary);
             dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && dispatch(clearBuyingSummary());
+            response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
             dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
@@ -63,11 +69,12 @@ export const updateCandiesCountByOrder = (buyingSummary) => {
     }
 }
 
-export const updateCandyRow = (rowId , updatedCandyData) => {
+export const updateCandyRow = (rowId , updatedCandyData , history) => {
     return async (dispatch) => {
         try {     
-            const response = await putRequest('/candy/'+ rowId , updatedCandyData);
+            const response = await putRequest('/candy/'+ rowId , true, updatedCandyData);
             response.status === 200 && dispatch(updateCandyToStore(response.updatedCandy));
+            response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
             dispatch(indicationMessageHandler(response.type, response.message));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
@@ -76,10 +83,11 @@ export const updateCandyRow = (rowId , updatedCandyData) => {
     }
 }
 
-export const deleteCandyRowFromServer = rowId => {
+export const deleteCandyRowFromServer = (rowId , history) => {
     return async (dispatch) => {
         try {     
-            const response = await deleteRequest('/candy/'+ rowId);
+            const response = await deleteRequest('/candy/'+ rowId , true);
+            response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
             dispatch(indicationMessageHandler(response.type, response.message));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
@@ -91,7 +99,7 @@ export const deleteCandyRowFromServer = rowId => {
 export const loadCandiesArrayFromServer = () => {
     return async (dispatch) => {
         try {     
-            const response = await getRequest('/candies');
+            const response = await getRequest('/candies' , false);
             dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && dispatch(updateCandiesArray(response.candies));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
@@ -101,14 +109,13 @@ export const loadCandiesArrayFromServer = () => {
     }
 }
 
-export const addNewCandy = (newCandyFormData , visibleFalse , setKey) => {
+export const addNewCandy = (newCandyFormData , visibleFalse , setKey , history) => {
     return async (dispatch) => {
         try {     
-            const response = await postRequest('/candy' , newCandyFormData);
+            const response = await postRequest('/candy' , true , newCandyFormData);
             dispatch(indicationMessageHandler(response.type, response.message));
-            response.status === 200 && (
-                setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy))
-            );
+            response.status === 200 && (setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy)));
+            response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
             dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
@@ -116,10 +123,10 @@ export const addNewCandy = (newCandyFormData , visibleFalse , setKey) => {
     }
 }
 
-export const createNewUser = (registerUserFormData , history , state) => {
+export const signUp = (registerUserFormData , history , state) => {
     return async (dispatch) => {
         try {     
-            const response = await postRequest('/user' , registerUserFormData);
+            const response = await postRequest('/user' , false, registerUserFormData);
             dispatch(indicationMessageHandler(response.type, response.message));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
             response.status === 200 && history.push('/login', state);
@@ -132,9 +139,10 @@ export const createNewUser = (registerUserFormData , history , state) => {
 export const login = (loginUserFormData , history , urlParams) => {
     return async (dispatch) => {
         try {
-            const response = await postRequest('/login' , loginUserFormData);
+            const response = await postRequest('/login' , false , loginUserFormData);
             if(response.status === 200) {
                 dispatch(updateLoggedInUserFormData(response.user));
+                localStorage.setItem('accessToken' , response.accessToken);
                 urlParams && urlParams.backToBuyOnline && history.push('/home/buy-online');
                 !(urlParams && urlParams.backToBuyOnline) && history.push('/home');
             } else {
