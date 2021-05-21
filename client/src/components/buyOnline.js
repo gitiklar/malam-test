@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { Divider, Input, message, Tooltip } from 'antd';
+import { Divider, Input, message } from 'antd';
 import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -47,9 +47,7 @@ const BuyOnline = () => {
     return (
       <div className="buyOnlineContainer">
             <div className="topBuyOnlineContainer">
-                    <Tooltip placement="top" title="For payment">
-                        <Payment forPaymentHandler={forPaymentHandler} isVisible = {isVisible} setIsVisible = {setIsVisible}/>
-                    </Tooltip>
+                <Payment forPaymentHandler={forPaymentHandler} isVisible = {isVisible} setIsVisible = {setIsVisible}/>
             </div>
             <div className="buyOnlineGalery">
                 {
@@ -57,22 +55,20 @@ const BuyOnline = () => {
                         {
                              candiesArray.map(candy => { 
                                  return <Col key={candy._id} span={4} >
-                                            <Tooltip placement="top" title="Add candy">
-                                                <img src={klikImg}></img>
-                                            </Tooltip>
+                                            <img src={klikImg}></img>
                                             <Divider/>
                                             <div className="priceInputContainer">
                                                 <div>{`${candy.price}$`}</div>
                                                 <Input type="number" min={0} value = {
-                                                    buyingSummary.find(el=>el.id === candy._id) ? buyingSummary.find(el=>el.id === candy._id).count : null
-                                                } 
+                                                    buyingSummary.find(el => el.id === candy._id) ? buyingSummary.find(el=>el.id === candy._id).count : null
+                                                }
                                                 onChange={(e)=>onChangeHandler(candy._id , e.target.value)}/>
                                                 <span>Pcs</span>
                                             </div>
                                             <div>{candy.candyName}</div>
                                         </Col>
                                 }
-                            )                            
+                            )
                         }
                     </Row>
                 }
