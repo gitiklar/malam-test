@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/candy-shop',{ useNewUrlParser: true 
 app.use(express.json());
 app.use(cors({ origin: ["http://localhost:8080"], useCredentials: true, }));
 
-//Check for all requests
+//Checking each request with "x-access-token"
 app.use(async (req, res, next) => {
     if(!req.headers["x-access-token"]) return next();
     const accessToken = req.headers["x-access-token"];

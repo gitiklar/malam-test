@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Popconfirm, Form, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { Table, Popconfirm, Form, Typography } from 'antd';
+import 'antd/dist/antd.css';
 
 import EditableCell from './editableCell';
 import { deleteCandyRow, deleteCandyRowFromServer, updateCandyRow } from '../redux/actions';
-import 'antd/dist/antd.css';
 
 const CandiesEditableTable = () => {
     const [editingKey, setEditingKey] = useState('');

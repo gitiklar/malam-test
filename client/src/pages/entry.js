@@ -1,13 +1,12 @@
 
 
-import { SmileOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-import 'antd/dist/antd.css';
 import React  from 'react';
+import { Link } from "react-router-dom";
+import { Col, Row } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import 'antd/dist/antd.css';
 
 import logoImg from '../../styles/images/logo.jpg';
-import { Col, Row } from 'antd';
-
 
 const Entry = () => {
     
@@ -15,7 +14,7 @@ const Entry = () => {
         <div className="entryContainer">
 			<header id="header">
                 <Row>
-                    <Col span={8}><Link to="/"><img src={logoImg} alt="logo"/></Link></Col>
+                    <Col span={8}><Link to="/"><img src = { logoImg } alt="logo"/></Link></Col>
                     <Col span={8}><h1 className="titleText">Candy shop</h1></Col>
                     <Col span={8}><div className="linkToHome"><Link to="/home"><u>Entry</u></Link></div></Col>
                 </Row>

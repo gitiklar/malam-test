@@ -1,5 +1,5 @@
-import { getRequest } from "../service";
 import { GET_USER_IF_ACTIVE, updateLoggedInUserFormData, indicationMessageHandler } from "./actions";
+import { getRequest } from "../service";
 
 export const updateLoggedInUserFormDataMiddleware = ({dispatch}) => next => async action => {
     const userId = (localStorage.getItem('userId'));
