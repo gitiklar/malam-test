@@ -11,7 +11,6 @@ import store from './redux/store';
 import '../styles/main.scss';
 
 const App = () => {
-
     return (
         <Provider store={store}>
             <RouterApp/>

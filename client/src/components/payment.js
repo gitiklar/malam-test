@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form , Button, Input, Modal, Tooltip } from 'antd';
 import { UserAddOutlined , IdcardOutlined , CreditCardOutlined , ContactsOutlined  , ShoppingCartOutlined } from '@ant-design/icons';
-import { updateCandiesCountByOrder } from '../redux/actions';
+import { indicationMessageHandler , updateCandiesCountByOrder } from '../redux/actions';
 import { useHistory } from 'react-router';
 
 import useIndicationMessage from '../customHooks/useIndicationMessage';
 
-const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
+const Payment = () => {
+    const [ isVisible , setIsVisible ] = useState(false);
     const dispatch = useDispatch();
     const history = useHistory();
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);   
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
+    const role = useSelector(state => state.userReducer.loggedInUserFormData.role);
     let paymentCalc = 0;
 
     if(buyingSummary.length) {
@@ -26,6 +28,19 @@ const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
     }
     
     const visibleFalse = () => setIsVisible(false);
+
+    const forPaymentHandler = () => {
+        if(!buyingSummary.length) {
+            dispatch(indicationMessageHandler('info', 'You must buy at least one candy!'));
+            setTimeout(()=>dispatch(indicationMessageHandler('', '')));
+        } else {
+            if(role === 'guest') {
+                history.push('/login', { backToBuyOnline: true });
+            } else {
+                setIsVisible(true);
+            }
+        }
+    }
 
     return (
         <div className="paymentContainer">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from "react-router-dom";
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
@@ -12,7 +12,8 @@ const Register = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { state } = useLocation();
-    
+    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
+
     useIndicationMessage();
     
     const onRegister = (registerUserFormData) => {  

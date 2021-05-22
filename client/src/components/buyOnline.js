@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { Divider, Input } from 'antd';
 import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
-import { indicationMessageHandler , updateBuyingSummary } from '../redux/actions';
+import { updateBuyingSummary } from '../redux/actions';
 import klikImg from '../../styles/images/klik.jpg';
 import Payment from './payment';
 import useIndicationMessage from '../customHooks/useIndicationMessage';
 
 const BuyOnline = () => {
-    const [ isVisible , setIsVisible ] = useState(false);
-    const history = useHistory();
     const dispatch = useDispatch();
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
-    const role = useSelector(state => state.userReducer.loggedInUserFormData.role);
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);
     
     useIndicationMessage();
@@ -23,28 +19,15 @@ const BuyOnline = () => {
     const onChangeHandler = (id ,value) => {
         const newBuyingSummary = JSON.parse(JSON.stringify(buyingSummary));
         const indexOfCurrentCandy = buyingSummary.findIndex(candy=>candy.id === id);
-        indexOfCurrentCandy !== -1 && (newBuyingSummary[indexOfCurrentCandy].count = value);
         indexOfCurrentCandy === -1 && (newBuyingSummary.push({id , count: value}));
+        indexOfCurrentCandy !== -1 && (newBuyingSummary[indexOfCurrentCandy].count = value);
         dispatch(updateBuyingSummary(newBuyingSummary));
-    }
-
-    const forPaymentHandler = () => {
-        if(!buyingSummary.length) {
-            dispatch(indicationMessageHandler('info', 'You must buy at least one candy!'));
-            setTimeout(()=>dispatch(indicationMessageHandler('', '')));
-        } else {
-            if(role === 'guest') {
-                history.push('/login', { backToBuyOnline: true });
-            } else {
-                setIsVisible(true);
-            }
-        }
     }
 
     return (
       <div className="buyOnlineContainer">
             <div className="topBuyOnlineContainer">
-                <Payment forPaymentHandler={forPaymentHandler} isVisible = {isVisible} setIsVisible = {setIsVisible}/>
+                <Payment/>
             </div>
             <div className="buyOnlineGalery">
                 {
