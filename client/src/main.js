@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Register from './pages/register';
@@ -14,16 +14,27 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <Router>
-                <Switch>
-                    <Route path="/register" component = {Register}/>
-                    <Route path="/login" component = {Login}/>
-                    <Route path="/home" component = {Home}/>
-                    <Route path="/" component = {Entry}/>
-                </Switch>
-            </Router>
+            <RouterApp/>
         </Provider>
     );
 };
+
+const RouterApp = () => {
+    const allDataIsLoaded = useSelector(state=>state.isLoadReducer.allDataIsLoaded);
+    return (
+        <>
+            { 
+                allDataIsLoaded ? <Router>
+                                        <Switch>
+                                            <Route path="/register" component = {Register}/>
+                                            <Route path="/login" component = {Login}/>
+                                            <Route path="/home" component = {Home}/>
+                                            <Route path="/" component = {Entry}/>
+                                        </Switch>
+                                    </Router> : <div>Loading...</div>
+            }
+        </>
+    )
+}
 
 ReactDOM.render(<App/> , document.querySelector('main'));
