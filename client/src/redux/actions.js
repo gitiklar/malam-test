@@ -7,7 +7,8 @@ export const DELETE_CANDY_ROW = 'DELETE_CANDY_ROW';
 export const UPDATE_CANDY_TO_STORE = 'UPDATE_CANDY_TO_STORE';
 export const UPDATE_BUYING_SUMMARY = 'UPDATE_BUYING_SUMMARY';
 export const CLEAR_BUYING_SUMMARY = 'CLEAR_BUYING_SUMMARY';
-export const ALL_DATA_IS_LOADED = 'ALL_DATA_IS_LOADED';
+export const USER_DATA_IS_LOADED = 'USER_DATA_IS_LOADED';
+export const CANDIES_DATA_IS_LOADED = 'CANDIES_DATA_IS_LOADED';
 const SEND_X_ACCESS_TOKEN = true;
 const DONT_SEND_X_ACCESS_TOKEN = false;
 
@@ -53,8 +54,12 @@ export const updateCandyToStore = newCandyFormData => {
     return { type: UPDATE_CANDY_TO_STORE , payload: newCandyFormData};
 }
 
-export const allDataIsLoaded = () => {
-    return { type: ALL_DATA_IS_LOADED };
+export const userDataIsLoaded = () => {
+    return { type: USER_DATA_IS_LOADED };
+}
+
+export const candiesDataIsLoaded = () => {
+    return { type: CANDIES_DATA_IS_LOADED };
 }
 
 export const getUserIfActive = () => {
@@ -64,9 +69,9 @@ export const getUserIfActive = () => {
             const response = await getRequest('/user/' + userId , true );
             response.status === 200 && dispatch(updateLoggedInUserFormData(response.user));
         } catch(err) {
-            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
         }
-        dispatch(allDataIsLoaded());
+        dispatch(userDataIsLoaded());
     }
 }
 
@@ -75,10 +80,13 @@ export const loadCandiesArrayFromServer = () => {
         try {     
             const response = await getRequest('/candies' , DONT_SEND_X_ACCESS_TOKEN);
             dispatch(indicationMessageHandler(response.type, response.message));
-            response.status === 200 && dispatch(updateCandiesArray(response.candies));
+            response.status === 200 && (
+                dispatch(updateCandiesArray(response.candies)),
+                setTimeout(()=>dispatch(candiesDataIsLoaded()) , 500)
+            );
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
         }
     }
 }
@@ -119,7 +127,7 @@ export const deleteCandyRowFromServer = (rowId , history) => {
             dispatch(indicationMessageHandler(response.type, response.message));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
-            dispatch(indicationMessageHandler('error','!An error occurred the form was not submitted'));
+            dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
         }
     }
 }

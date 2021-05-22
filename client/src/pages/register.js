@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from "react-router-dom";
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
 import { signUp } from '../redux/actions';
+import useIndicationMessage from '../customHooks/useIndicationMessage';
 
 const Register = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { state } = useLocation();
-    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
-
-    useEffect(()=> {
-        if(!indicationMessage.message) return;
-        indicationMessage.type === 'error' && message.error({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'success' && message.success({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-    } , [indicationMessage.message]);
-
+    
+    useIndicationMessage();
+    
     const onRegister = (registerUserFormData) => {  
         registerUserFormData.role = 'client';
         delete registerUserFormData['confirm-password'];

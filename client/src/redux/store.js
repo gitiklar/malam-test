@@ -7,7 +7,7 @@ import userReducer from './reducers/userReducer';
 import candiesReducer from './reducers/candiesReducer';
 import buyingSummaryReducer from './reducers/buyingSummaryReducer';
 
-const reducer = combineReducers({ isLoadReducer ,userReducer , candiesReducer , buyingSummaryReducer});
+const reducer = combineReducers({ isLoadReducer , userReducer , candiesReducer , buyingSummaryReducer});
 
 const store = createStore(reducer , applyMiddleware(thunk));
 store.dispatch(getUserIfActive());

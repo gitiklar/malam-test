@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Form , Button, Input, Modal, message } from 'antd';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Form , Button, Input, Modal } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 
 import { addNewCandy } from '../redux/actions';
 import { useHistory } from 'react-router';
 
+import useIndicationMessage from '../customHooks/useIndicationMessage';
+
 const AddNewCandy = ({ isVisible , setIsVisible }) => {
     const [ key , setKey ] = useState(true);
     const dispatch = useDispatch();
     const history = useHistory();
-    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
-
-    useEffect(()=> {
-        if(!indicationMessage.message) return;
-        indicationMessage.type === 'error' && message.error({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'success' && message.success({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-    } , [indicationMessage.message]);
+    
+    useIndicationMessage();
 
     const handleOk = newCandyFormData =>  {
         dispatch(addNewCandy(newCandyFormData , visibleFalse , setKey , history));

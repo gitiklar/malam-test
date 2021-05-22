@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form , Button, Input, Modal, message , Tooltip} from 'antd';
+import { Form , Button, Input, Modal, Tooltip } from 'antd';
 import { UserAddOutlined , IdcardOutlined , CreditCardOutlined , ContactsOutlined  , ShoppingCartOutlined } from '@ant-design/icons';
 import { updateCandiesCountByOrder } from '../redux/actions';
 import { useHistory } from 'react-router';
 
+import useIndicationMessage from '../customHooks/useIndicationMessage';
+
 const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const indicationMessage = useSelector(state => state.userReducer.indicationMessage);   
     const buyingSummary = useSelector(state => state.buyingSummaryReducer.buyingSummary);   
     const candiesArray = useSelector(state => state.candiesReducer.candiesArray);
     let paymentCalc = 0;
@@ -17,12 +18,7 @@ const Payment = ({ isVisible , setIsVisible ,forPaymentHandler }) => {
          paymentCalc = buyingSummary.reduce((p , n) =>  p + candiesArray.find(candy=>candy._id === n.id).price * n.count , 0);
     }
    
-    useEffect(()=> {
-        if(!indicationMessage.message) return;
-        indicationMessage.type === 'error' && message.error({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'info' && message.info({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-        indicationMessage.type === 'success' && message.success({ content: indicationMessage.message, key:indicationMessage.key, duration: 3 });
-    } , [indicationMessage.message]);
+    useIndicationMessage();
 
     const handleOk = () =>  {
         dispatch(updateCandiesCountByOrder(buyingSummary , history));

@@ -1,13 +1,17 @@
 import produce from 'immer';
-import { ALL_DATA_IS_LOADED } from '../actions';
+import { USER_DATA_IS_LOADED , CANDIES_DATA_IS_LOADED } from '../actions';
 
 const initialState = {
-    allDataIsLoaded: false,
+    userDataIsLoaded: false,
+    candiesDataIsLoaded: false,
 };
 
 export default produce((state , action) => {
     switch(action.type) {
-        case ALL_DATA_IS_LOADED: 
-            state.allDataIsLoaded = true;
+        case USER_DATA_IS_LOADED: 
+            state.userDataIsLoaded = true;
+            break;
+        case CANDIES_DATA_IS_LOADED: 
+            state.candiesDataIsLoaded = true;
             break;
     }} , initialState);

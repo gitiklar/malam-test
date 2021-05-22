@@ -20,11 +20,11 @@ const App = () => {
 };
 
 const RouterApp = () => {
-    const allDataIsLoaded = useSelector(state=>state.isLoadReducer.allDataIsLoaded);
+    const userDataIsLoaded = useSelector(state=>state.isLoadReducer.userDataIsLoaded);
     return (
         <>
             { 
-                allDataIsLoaded ? <Router>
+                userDataIsLoaded ? <Router>
                                         <Switch>
                                             <Route path="/register" component = {Register}/>
                                             <Route path="/login" component = {Login}/>
