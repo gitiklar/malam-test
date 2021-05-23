@@ -88,8 +88,9 @@ const updateCandiesCounts = async (req, res) => {
     );
 
     try {
-        const result =  await Candy.bulkWrite(arrayToUpdate);
-        res.status(200).json({ status: 200, type: 'success' , message: 'Order was successfully placed!' , result});
+        await Candy.bulkWrite(arrayToUpdate);
+        const newCandies = await Candy.find({});
+        res.status(200).json({ status: 200, type: 'success' , message: 'Order was successfully placed!' , newCandies});
     } catch(err) {
         res.status(400).json({ status: 400, type: 'error' , message: `Oops, an error occurred  : ${err.message}` });
     }

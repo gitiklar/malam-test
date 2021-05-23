@@ -5,7 +5,6 @@ import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
 import { updateBuyingSummary } from '../redux/actions';
-import klikImg from '../../styles/images/klik.jpg';
 import Payment from './payment';
 import useIndicationMessage from '../customHooks/useIndicationMessage';
 const serverUrl = 'http://localhost:3000';

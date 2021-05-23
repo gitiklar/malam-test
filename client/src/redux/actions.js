@@ -96,7 +96,7 @@ export const updateCandiesCountByOrder = (buyingSummary , history) => {
         try {     
             const response = await postRequest('/candies', SEND_X_ACCESS_TOKEN , buyingSummary);
             dispatch(indicationMessageHandler(response.type, response.message));
-            response.status === 200 && dispatch(clearBuyingSummary());
+            response.status === 200 && (dispatch(updateCandiesArray(response.newCandies)),dispatch(clearBuyingSummary()));
             response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
             setTimeout(()=> dispatch(indicationMessageHandler('', '')));
         } catch(err) {
