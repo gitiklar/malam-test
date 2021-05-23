@@ -26,9 +26,9 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
     const normFile = e => {
         if (Array.isArray(e)) {
             return e;
-          }
+        }
         
-          return e && e.fileList;
+        return e && e.fileList;
     }
     
     const visibleFalse = () => setIsVisible(false);

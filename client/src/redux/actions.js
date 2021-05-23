@@ -15,15 +15,15 @@ const DONT_SEND_X_ACCESS_TOKEN = false;
 import { addCandyToDB, deleteRequest, getRequest, postRequest, putRequest } from "../service";
 
 export const clearBuyingSummary = () => {
-    return { type: CLEAR_BUYING_SUMMARY};
+    return { type: CLEAR_BUYING_SUMMARY };
 }
 
 export const updateBuyingSummary = buyingSummary => {
-    return { type: UPDATE_BUYING_SUMMARY ,  payload: buyingSummary};
+    return { type: UPDATE_BUYING_SUMMARY ,  payload: buyingSummary };
 }
 
 export const deleteCandyRow = rowIndex => {
-    return { type: DELETE_CANDY_ROW ,  payload: rowIndex};
+    return { type: DELETE_CANDY_ROW ,  payload: rowIndex };
 }
 
 export const updateLoggedInUserFormData = user => {
@@ -64,12 +64,14 @@ export const candiesDataIsLoaded = () => {
 
 export const getUserIfActive = () => {
     return async (dispatch) => {
-        const userId = (localStorage.getItem('userId'));
-        try {
-            const response = await getRequest('/user/' + userId , true );
-            response.status === 200 && dispatch(updateLoggedInUserFormData(response.user));
-        } catch(err) {
-            dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
+        const userId = localStorage.getItem('userId');
+        if(userId) {
+            try {
+                const response = await getRequest('/user/' + userId , true );
+                response.status === 200 && dispatch(updateLoggedInUserFormData(response.user));
+            } catch(err) {
+                dispatch(indicationMessageHandler('error','Oops, an error occurred!'));
+            }
         }
         dispatch(userDataIsLoaded());
     }
@@ -133,12 +135,9 @@ export const deleteCandyRowFromServer = (rowId , history) => {
 }
 
 export const addNewCandy = (newCandyFormData , visibleFalse , setKey , history) => {
-    
     return async (dispatch) => {
         try {     
-            //const response = await postRequest('/candy' , SEND_X_ACCESS_TOKEN , newCandyFormData , "multipart/form-data");
             const response = await addCandyToDB(newCandyFormData);
-
             dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && (setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy)));
             response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));
