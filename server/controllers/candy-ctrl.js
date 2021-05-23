@@ -55,9 +55,8 @@ const updateCandy = async (req, res) => {
         if(!candy) {
             res.status(404).json({ status: 404 , type: 'error' , message: 'Candy not found' });
         } else {
-            candy.candyName = updatedCandyData.candyName;
-            candy.price = updatedCandyData.price;
-            candy.image = updatedCandyData.image;
+                candy.candyName = updatedCandyData.candyName;
+                candy.price = updatedCandyData.price;
             try {
                 const updatedCandy = await candy.save();
                 res.status(200).json({ status: 200, type: 'success' , message: 'Candy successfully updated!' , updatedCandy});

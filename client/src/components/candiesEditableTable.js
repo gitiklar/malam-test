@@ -52,7 +52,7 @@ const CandiesEditableTable = () => {
 
     const columns = [   {   title: 'candyName'      , dataIndex: 'candyName' ,  width: '30%' , editable: true, }, 
                         {   title: 'price'          , dataIndex: 'price'     ,  width: '30%' , editable: true, },
-                        {   title: 'image'          , dataIndex: 'image'     ,  width: '30%' , editable: true, },
+                        {   title: 'image'          , dataIndex: 'image'     ,  width: '30%' , editable: false, },
                         {   title: 'operation'      , dataIndex: 'operation' ,   
                             render: (_, record) => {
                                 const editable = isEditing(record);                                                                               
