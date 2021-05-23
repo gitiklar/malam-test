@@ -12,7 +12,7 @@ export const CANDIES_DATA_IS_LOADED = 'CANDIES_DATA_IS_LOADED';
 const SEND_X_ACCESS_TOKEN = true;
 const DONT_SEND_X_ACCESS_TOKEN = false;
 
-import { deleteRequest, getRequest, postRequest, putRequest } from "../service";
+import { addCandyToDB, deleteRequest, getRequest, postRequest, putRequest } from "../service";
 
 export const clearBuyingSummary = () => {
     return { type: CLEAR_BUYING_SUMMARY};
@@ -133,9 +133,12 @@ export const deleteCandyRowFromServer = (rowId , history) => {
 }
 
 export const addNewCandy = (newCandyFormData , visibleFalse , setKey , history) => {
+    
     return async (dispatch) => {
         try {     
-            const response = await postRequest('/candy' , SEND_X_ACCESS_TOKEN , newCandyFormData);
+            //const response = await postRequest('/candy' , SEND_X_ACCESS_TOKEN , newCandyFormData , "multipart/form-data");
+            const response = await addCandyToDB(newCandyFormData);
+
             dispatch(indicationMessageHandler(response.type, response.message));
             response.status === 200 && (setKey(key=>!key),  visibleFalse() , dispatch(addNewCandyToStore(response.newCandy)));
             response.status === 401 && (dispatch(logout()) , history.push('/login', { backToBuyOnline: true }));

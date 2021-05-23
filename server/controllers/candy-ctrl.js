@@ -1,7 +1,11 @@
 const Candy = require('../models/candy-model');
 
 const addCandy = async (req , res) => {
-    const candy = new Candy(req.body);
+    const { path: image } = req.file;
+    
+    const { candyName, price} = req.body;
+    const candy = new Candy({  candyName, price, image: image.replace('\\','/')});
+    
     try {
         const newCandy = await candy.save();
         res.status(200).json({ status: 200, type: 'success' , message: 'Candy successfully added!' , newCandy});

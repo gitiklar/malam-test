@@ -2,6 +2,8 @@ const User = require('../models/user-model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const JWT_SECRET = process.env.JWT_SECRET || '0a6b944d-d2fb-46fc-a85e-0295c986cd9f'
+
 
 async function hashPassword(password) {
     return await bcrypt.hash(password, 10);
@@ -16,7 +18,7 @@ const signUp = async (req , res) => {
         const { username, email, password, role } = req.body
         const hashedPassword = await hashPassword(password);
         const newUser = new User({ username, email, password: hashedPassword, role: role });
-        const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1H" });
+        const accessToken = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: "1H" });
         await newUser.save();
         res.status(200).json({ status: 200, type: 'success' , message: 'User successfully added!' , data: newUser, accessToken });
     } catch(err) {
@@ -42,7 +44,7 @@ const login = async (req , res) => {
             }
         }
         // change to 10 
-        const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1H' });
+        const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1H' });
         await User.findByIdAndUpdate(user._id, { accessToken });
         res.status(200).json({ status: 200 , user , accessToken });
     } catch(err) {

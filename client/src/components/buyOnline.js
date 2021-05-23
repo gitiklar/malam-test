@@ -8,6 +8,7 @@ import { updateBuyingSummary } from '../redux/actions';
 import klikImg from '../../styles/images/klik.jpg';
 import Payment from './payment';
 import useIndicationMessage from '../customHooks/useIndicationMessage';
+const serverUrl = 'http://localhost:3000';
 
 const BuyOnline = () => {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const BuyOnline = () => {
                         {
                              candiesArray.map(candy => { 
                                  return <Col key={candy._id} span={4} >
-                                            <img src={klikImg}></img>
+                                            <img src={`${serverUrl}/${candy.image}`}></img>
                                             <Divider/>
                                             <div className="priceInputContainer">
                                                 <div>{`${candy.price}$`}</div>

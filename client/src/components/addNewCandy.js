@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form , Button, Input, Modal } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import { Form , Button, Input, Modal, Upload } from 'antd';
+import { CheckOutlined, UploadOutlined } from '@ant-design/icons';
 
 import { addNewCandy } from '../redux/actions';
 import { useHistory } from 'react-router';
@@ -16,7 +16,19 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
     useIndicationMessage();
 
     const handleOk = newCandyFormData =>  {
-        dispatch(addNewCandy(newCandyFormData , visibleFalse , setKey , history));
+        const allFormData = new FormData();
+        allFormData.append('candyName' ,newCandyFormData.candyName);
+        allFormData.append('price' ,newCandyFormData.price);       
+        allFormData.append('image', newCandyFormData.upload[0].originFileObj);
+        dispatch(addNewCandy( allFormData , visibleFalse , setKey , history));
+    }
+
+    const normFile = e => {
+        if (Array.isArray(e)) {
+            return e;
+          }
+        
+          return e && e.fileList;
     }
     
     const visibleFalse = () => setIsVisible(false);
@@ -35,8 +47,10 @@ const AddNewCandy = ({ isVisible , setIsVisible }) => {
                     <Form.Item name="price" rules={[{ required: true, message: 'Please enter candy price!',},]}>
                         <Input prefix={<CheckOutlined />} data-address={true} type="number" placeholder="candy price"/>
                     </Form.Item>
-                    <Form.Item name="image">
-                        <Input prefix={<CheckOutlined />} data-address={true} placeholder="candy image"/>
+                    <Form.Item name="upload" rules={[{ required: true, message: 'Please upload an image!',}]}  valuePropName="fileList" getValueFromEvent={normFile}>
+                        <Upload name="logo" action="/upload.do" listType="picture">
+                            <Button icon={<UploadOutlined />}>Click to upload</Button>
+                        </Upload>
                     </Form.Item>
                 </Form>
             </Modal>
