@@ -1,5 +1,5 @@
 
-const serverUrl = 'http://localhost:3000/api';
+const serverUrl = 'https://super-online-server.herokuapp.com/api';
 import axios from 'axios';
 
 const getToken = () => localStorage.getItem('accessToken');

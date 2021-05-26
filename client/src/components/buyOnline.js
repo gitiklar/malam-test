@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import { updateBuyingSummary } from '../redux/actions';
 import Payment from './payment';
 import useIndicationMessage from '../customHooks/useIndicationMessage';
-const serverUrl = 'http://localhost:3000';
+const serverUrl = 'https://super-online-server.herokuapp.com';
 
 const BuyOnline = () => {
     const dispatch = useDispatch();
