@@ -16,7 +16,7 @@ const StoreManagement = () => {
     return (
       <div className="innerContainer">
           <div className="topCandiesEditableTable">
-                <Tooltip placement="top" title="Add candy">
+                <Tooltip placement="top" title="Add product">
                     <img src={addCandyIcon} style={{width:'30px'}} onClick={()=>setIsVisible(true)}></img>
                 </Tooltip>
           </div>
