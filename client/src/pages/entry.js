@@ -15,7 +15,7 @@ const Entry = () => {
 			<header id="header">
                 <Row>
                     <Col span={8}><Link to="/"><img src = { logoImg } alt="logo"/></Link></Col>
-                    <Col span={8}><h1 className="titleText">Candy shop</h1></Col>
+                    <Col span={8}><h1 className="titleText">Super online</h1></Col>
                     <Col span={8}><div className="linkToHome"><Link to="/home"><u>Entry</u></Link></div></Col>
                 </Row>
 			</header>
@@ -25,7 +25,7 @@ const Entry = () => {
                     <div className="entryPage">
                         <div className="innerEntryPage">
                             <div className="bannerContainer">
-                                <h1> Wellcome to our candy shop </h1>
+                                <h1> Wellcome to our super online </h1>
                                 <h2> Hope you will enjoy from our new site <SmileOutlined/></h2>
                             </div>
                         </div>
